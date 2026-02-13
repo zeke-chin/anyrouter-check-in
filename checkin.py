@@ -187,8 +187,12 @@ def execute_check_in(client, account_name: str, provider_config, headers: dict):
 				print(f'[SUCCESS] {account_name}: Check-in successful!')
 				return True
 			else:
-				error_msg = result.get('msg', result.get('message', 'Unknown error'))
-				print(f'[FAILED] {account_name}: Check-in failed - {error_msg}')
+				message = str(result.get('msg', result.get('message', 'Unknown error')))
+				success_messages = {'签到成功', '今日已签到'}
+				if message in success_messages:
+					print(f'[SUCCESS] {account_name}: Check-in successful - {message}')
+					return True
+				print(f'[FAILED] {account_name}: Check-in failed - {message}')
 				return False
 		except json.JSONDecodeError:
 			# 如果不是 JSON 响应，检查是否包含成功标识
